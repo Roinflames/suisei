@@ -8,7 +8,6 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://suisei.cl/">
 
-  <!-- Open Graph / WhatsApp / LinkedIn -->
   <meta property="og:type"        content="website">
   <meta property="og:url"         content="https://suisei.cl/">
   <meta property="og:title"       content="Comet — Automatización judicial para el PJUD">
@@ -16,10 +15,8 @@
   <meta property="og:site_name"   content="Comet · suisei.cl">
   <meta property="og:locale"      content="es_CL">
 
-  <!-- Favicon (SVG inline) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23020509'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='20' fill='%2300FFB2'>☄</text></svg>">
 
-  <!-- Schema.org -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -30,40 +27,42 @@
     "applicationCategory": "LegalApplication",
     "operatingSystem": "Web",
     "inLanguage": "es-CL",
-    "provider": {
-      "@type": "Organization",
-      "name": "Comet",
-      "url": "https://suisei.cl"
-    },
-    "offers": {
-      "@type": "Offer",
-      "availability": "https://schema.org/PreOrder"
-    }
+    "provider": { "@type": "Organization", "name": "Comet", "url": "https://suisei.cl" },
+    "offers": { "@type": "Offer", "availability": "https://schema.org/PreOrder" }
   }
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg:         #020509;
-      --accent:     #00FFB2;
-      --hot:        #FF5E1A;
-      --particle:   #7ECFFF;
-      --text:       #D9EFF5;
-      --text-dim:   rgba(217, 239, 245, 0.38);
+      --bg:       #020509;
+      --accent:   #00FFB2;
+      --hot:      #FF5E1A;
+      --particle: #7ECFFF;
+      --text:     #D9EFF5;
+      --dim:      rgba(217,239,245,.38);
+      --dim2:     rgba(217,239,245,.58);
+      --glass:    rgba(8,18,32,.55);
+      --border:   rgba(126,207,255,.1);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
-      width: 100%; height: 100%;
-      overflow: hidden;
+      width: 100%;
       background: var(--bg);
       color: var(--text);
       font-family: 'DM Mono', monospace;
       cursor: none;
+      overflow-x: hidden;
+      overflow-y: hidden;
+    }
+
+    @media (max-height: 720px) {
+      html, body { overflow-y: auto; }
     }
 
     canvas {
@@ -71,6 +70,21 @@
       inset: 0;
       width: 100%; height: 100%;
       z-index: 0;
+    }
+
+    /* ── Scan lines ─────────────────────────────────────────── */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 3px,
+        rgba(0,0,0,.06) 3px,
+        rgba(0,0,0,.06) 4px
+      );
     }
 
     /* ── Custom cursor ──────────────────────────────────────── */
@@ -81,23 +95,23 @@
       background: var(--accent);
       pointer-events: none;
       z-index: 9999;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%,-50%);
       mix-blend-mode: screen;
       box-shadow: 0 0 10px var(--accent), 0 0 22px var(--accent);
       transition: width .12s, height .12s;
     }
     body:has(button:hover) #cur,
-    body:has(input:focus) #cur,
-    body:has(a:hover) #cur { width: 14px; height: 14px; }
+    body:has(input:focus)  #cur,
+    body:has(a:hover)      #cur { width: 14px; height: 14px; }
 
     /* ── Hero ───────────────────────────────────────────────── */
     .hero {
       position: relative; z-index: 10;
-      width: 100%; height: 100vh;
+      width: 100%; min-height: 100vh;
       display: flex; flex-direction: column;
       justify-content: center; align-items: center;
       text-align: center;
-      padding: 2rem;
+      padding: 5rem 2rem;
       gap: 0;
     }
 
@@ -106,22 +120,20 @@
       font-family: 'Unbounded', sans-serif;
       font-size: clamp(5rem, 16vw, 14rem);
       font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 0.85;
-      background: linear-gradient(130deg, #FFFFFF 0%, #7ECFFF 38%, #00FFB2 72%, #FF5E1A 100%);
+      line-height: .85;
+      background: linear-gradient(130deg, #FFF 0%, #7ECFFF 38%, #00FFB2 72%, #FF5E1A 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      filter: drop-shadow(0 0 50px rgba(0, 255, 178, 0.25));
       opacity: 0;
-      animation: rise .9s cubic-bezier(.16,1,.3,1) .2s forwards;
       position: relative;
+      animation: wordmark-land 1.1s cubic-bezier(.16,1,.3,1) .2s forwards;
     }
 
     .wordmark::before {
       content: 'COMET';
       position: absolute; inset: 0;
-      background: linear-gradient(130deg, #FFFFFF 0%, #7ECFFF 38%, #00FFB2 72%, #FF5E1A 100%);
+      background: linear-gradient(130deg, #FFF 0%, #7ECFFF 38%, #00FFB2 72%, #FF5E1A 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -129,12 +141,12 @@
       z-index: -1;
     }
 
-    /* ── Over/sub text ────────────────────────────────────────── */
+    /* ── Eyebrow & tagline ──────────────────────────────────── */
     .eyebrow {
-      font-size: clamp(.65rem, 1.3vw, .8rem);
+      font-size: clamp(.6rem, 1.2vw, .78rem);
       letter-spacing: .28em;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: var(--dim);
       margin-bottom: 1.4rem;
       opacity: 0;
       animation: rise .8s cubic-bezier(.16,1,.3,1) .55s forwards;
@@ -142,67 +154,110 @@
 
     .tagline {
       font-family: 'Unbounded', sans-serif;
-      font-size: clamp(.95rem, 2.4vw, 1.65rem);
+      font-size: clamp(.9rem, 2.2vw, 1.55rem);
       font-weight: 400;
       line-height: 1.5;
       color: var(--text);
-      margin-top: 1.6rem;
-      margin-bottom: 1.6rem;
-      max-width: 560px;
+      margin-top: 1.5rem;
+      margin-bottom: .9rem;
+      max-width: 540px;
       opacity: 0;
       animation: rise .8s cubic-bezier(.16,1,.3,1) .75s forwards;
     }
+    .tagline em { font-style: normal; color: var(--accent); }
 
-    .tagline em {
-      font-style: normal;
-      color: var(--accent);
+    /* ── Divider ─────────────────────────────────────────────── */
+    .divider {
+      width: 100%;
+      max-width: 540px;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(0,255,178,.13) 25%,
+        rgba(126,207,255,.1) 75%,
+        transparent 100%
+      );
+      margin: .5rem 0 1.1rem;
+      opacity: 0;
+      animation: fade-in .6s ease .80s forwards;
     }
 
-    /* ── Feature pills ──────────────────────────────────────── */
+    /* ── Audience ────────────────────────────────────────────── */
+    .audience {
+      font-size: clamp(.56rem, .95vw, .67rem);
+      letter-spacing: .14em;
+      color: var(--dim);
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: rise .7s cubic-bezier(.16,1,.3,1) .84s forwards;
+    }
+    .audience em { font-style: normal; color: var(--dim2); }
+
+    /* ── Feature cards ───────────────────────────────────────── */
     .features {
       display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
+      gap: .65rem;
+      width: 100%;
       max-width: 540px;
-      margin-bottom: 2rem;
+      margin-bottom: 1.9rem;
       opacity: 0;
-      animation: rise .8s cubic-bezier(.16,1,.3,1) .88s forwards;
+      animation: rise .8s cubic-bezier(.16,1,.3,1) .92s forwards;
     }
 
     .feat {
+      flex: 1;
       display: flex;
-      align-items: center;
-      gap: .4rem;
-      font-size: clamp(.6rem, 1.1vw, .72rem);
-      color: var(--text-dim);
-      letter-spacing: .05em;
-      border: 1px solid rgba(126, 207, 255, 0.12);
-      border-radius: 2px;
-      padding: .35rem .7rem;
-      backdrop-filter: blur(6px);
-      background: rgba(8, 18, 32, 0.4);
+      flex-direction: column;
+      gap: .22rem;
+      padding: .8rem .9rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      text-align: left;
+      transition: border-color .3s, box-shadow .3s, transform .25s;
+    }
+    .feat:hover {
+      border-color: rgba(0,255,178,.28);
+      box-shadow: 0 0 28px rgba(0,255,178,.07), inset 0 0 14px rgba(0,255,178,.03);
+      transform: translateY(-3px);
+    }
+    .feat-icon { color: var(--accent); font-size: .72rem; }
+    .feat strong {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(.52rem,.9vw,.62rem);
+      font-weight: 700;
+      letter-spacing: .06em;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .feat p {
+      font-size: clamp(.5rem,.85vw,.58rem);
+      color: var(--dim);
+      line-height: 1.6;
+      letter-spacing: .02em;
     }
 
-    .feat-icon { color: var(--accent); }
+    @media (max-width: 480px) {
+      .features { flex-direction: column; gap: .5rem; }
+      .feat { flex-direction: row; align-items: flex-start; gap: .6rem; }
+      .feat-icon { margin-top: .15rem; }
+    }
 
     /* ── Waitlist form ──────────────────────────────────────── */
     .form-wrap {
       opacity: 0;
-      animation: rise .8s cubic-bezier(.16,1,.3,1) 1.05s forwards;
+      animation: rise .8s cubic-bezier(.16,1,.3,1) 1.08s forwards;
       width: 100%;
       max-width: 460px;
     }
 
-    .waitlist {
-      display: flex;
-      width: 100%;
-    }
+    .waitlist { display: flex; width: 100%; }
 
     .waitlist input[type="email"] {
       flex: 1;
-      background: rgba(8, 18, 32, 0.75);
-      border: 1px solid rgba(126, 207, 255, 0.22);
+      background: rgba(8,18,32,.75);
+      border: 1px solid rgba(126,207,255,.22);
       border-right: none;
       border-radius: 3px 0 0 3px;
       padding: .85rem 1.2rem;
@@ -213,12 +268,13 @@
       backdrop-filter: blur(12px);
       transition: border-color .25s, box-shadow .25s;
       cursor: none;
+      animation: input-idle 5s ease 3s infinite;
     }
-    .waitlist input::placeholder { color: var(--text-dim); }
+    .waitlist input::placeholder { color: var(--dim); }
     .waitlist input:focus {
+      animation: none;
       border-color: var(--accent);
-      box-shadow: 0 0 22px rgba(0, 255, 178, .14),
-                  inset 0 0 12px rgba(0, 255, 178, .05);
+      box-shadow: 0 0 22px rgba(0,255,178,.14), inset 0 0 12px rgba(0,255,178,.05);
     }
 
     .waitlist button {
@@ -234,10 +290,12 @@
       cursor: none;
       transition: background .2s, box-shadow .2s, transform .1s;
       white-space: nowrap;
+      animation: btn-pulse 3.5s ease 3s infinite;
     }
     .waitlist button:hover {
+      animation: none;
       background: #33FFBE;
-      box-shadow: 0 0 32px rgba(0, 255, 178, .55);
+      box-shadow: 0 0 36px rgba(0,255,178,.6);
     }
     .waitlist button:active { transform: scale(.97); }
 
@@ -248,22 +306,23 @@
       font-size: .78rem;
       letter-spacing: .06em;
     }
-    .ok.show {
-      display: block;
-      animation: rise .5s ease;
-    }
+    .ok.show { display: block; animation: rise .5s ease; }
 
-    .demo-link {
-      display: inline-block;
-      margin-top: .85rem;
-      font-size: .7rem;
-      color: var(--text-dim);
+    /* ── WhatsApp CTA ────────────────────────────────────────── */
+    .wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      margin-top: .9rem;
+      font-size: .68rem;
+      color: var(--dim);
       text-decoration: none;
-      letter-spacing: .07em;
-      transition: color .2s;
+      letter-spacing: .08em;
+      transition: color .2s, gap .2s;
       cursor: none;
     }
-    .demo-link:hover { color: var(--accent); }
+    .wa-btn:hover { color: var(--accent); gap: .65rem; }
+    .wa-btn svg { flex-shrink: 0; }
 
     /* ── Bottom bar ─────────────────────────────────────────── */
     .bar {
@@ -274,17 +333,17 @@
       padding: 0 2.8rem;
       z-index: 10;
       opacity: 0;
-      animation: rise .6s ease 1.4s forwards;
+      animation: rise .6s ease 1.5s forwards;
     }
 
     .pulse-dot {
       display: flex;
       align-items: center;
       gap: .45rem;
-      font-size: .65rem;
+      font-size: .63rem;
       letter-spacing: .18em;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: var(--dim);
     }
     .pulse-dot::before {
       content: '';
@@ -296,20 +355,45 @@
     }
 
     .domain-badge {
-      font-size: .65rem;
+      font-size: .63rem;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: var(--dim);
     }
 
     /* ── Keyframes ──────────────────────────────────────────── */
+    @keyframes wordmark-land {
+      0%   { opacity: 0; transform: translateY(28px); letter-spacing: .18em;
+             filter: drop-shadow(0 0 80px rgba(0,255,178,.55)); }
+      65%  { opacity: 1; transform: translateY(0);
+             filter: drop-shadow(0 0 60px rgba(0,255,178,.35)); }
+      100% { opacity: 1; transform: translateY(0); letter-spacing: -.04em;
+             filter: drop-shadow(0 0 50px rgba(0,255,178,.22)); }
+    }
+
     @keyframes rise {
-      from { opacity: 0; transform: translateY(18px); }
+      from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
     @keyframes blink {
       0%, 100% { opacity: 1; }
       50%       { opacity: .25; }
+    }
+
+    @keyframes btn-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,178,0); }
+      50%       { box-shadow: 0 0 30px rgba(0,255,178,.38); }
+    }
+
+    @keyframes input-idle {
+      0%, 100% { border-color: rgba(126,207,255,.22); }
+      50%       { border-color: rgba(0,255,178,.18); }
     }
   </style>
 </head>
@@ -317,16 +401,36 @@
 
 <div id="cur"></div>
 <canvas id="c"></canvas>
+<div class="scanlines" aria-hidden="true"></div>
 
 <main class="hero">
   <p class="eyebrow">suisei.cl &mdash; Próximamente</p>
   <h1 class="wordmark">COMET</h1>
+
   <p class="tagline">Automatización judicial e<br><em>inteligencia procesal para el PJUD.</em></p>
 
+  <div class="divider" aria-hidden="true"></div>
+
+  <p class="audience">
+    Para <em>estudios jurídicos</em> · <em>aseguradoras</em> · <em>empresas con causas en el PJUD</em>
+  </p>
+
   <div class="features" aria-label="Características">
-    <span class="feat"><span class="feat-icon">◈</span> Monitor en tiempo real</span>
-    <span class="feat"><span class="feat-icon">◈</span> PDFs automatizados</span>
-    <span class="feat"><span class="feat-icon">◈</span> Colas resilientes</span>
+    <div class="feat">
+      <span class="feat-icon">◈</span>
+      <strong>Monitor en tiempo real</strong>
+      <p>Alertas automáticas cuando tus causas se actualizan en el PJUD.</p>
+    </div>
+    <div class="feat">
+      <span class="feat-icon">◈</span>
+      <strong>PDFs automatizados</strong>
+      <p>Descarga de escritos sin CAPTCHAs ni intervención manual.</p>
+    </div>
+    <div class="feat">
+      <span class="feat-icon">◈</span>
+      <strong>Colas resilientes</strong>
+      <p>Reintentos automáticos y deduplicación garantizada.</p>
+    </div>
   </div>
 
   <div class="form-wrap">
@@ -335,8 +439,13 @@
       <button type="submit">ÚNETE</button>
     </form>
     <p class="ok" id="ok">✦ En órbita. Te avisamos cuando aterricemos.</p>
-    <a class="demo-link" href="https://wa.me/56964388698?text=Hola%2C%20quiero%20ver%20el%20demo%20de%20Comet" target="_blank" rel="noopener">
-      Pide un demo por WhatsApp →
+    <a class="wa-btn"
+       href="https://wa.me/56964388698?text=Hola%2C%20quiero%20ver%20el%20demo%20de%20Comet"
+       target="_blank" rel="noopener">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+      </svg>
+      Pide un demo
     </a>
   </div>
 </main>
@@ -349,11 +458,9 @@
 <script>
 // ── Cursor ─────────────────────────────────────────────────────────────────
 const cur = document.getElementById('cur');
-let mx = -200, my = -200;
 document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cur.style.left = mx + 'px';
-  cur.style.top  = my + 'px';
+  cur.style.left = e.clientX + 'px';
+  cur.style.top  = e.clientY + 'px';
 });
 
 // ── Canvas setup ───────────────────────────────────────────────────────────
@@ -369,11 +476,11 @@ resize();
 window.addEventListener('resize', () => { resize(); spawnParticles(); });
 
 // ── Particles ──────────────────────────────────────────────────────────────
-const COUNT      = Math.min(Math.floor((W * H) / 7500), 130);
-const DIST       = 140;
-const TRAIL_MAX  = 40;
-let particles    = [];
-let trail        = [];
+const COUNT     = Math.min(Math.floor((W * H) / 7500), 130);
+const DIST      = 140;
+const TRAIL_MAX = 40;
+let particles   = [];
+let trail       = [];
 
 class Particle {
   constructor(initial) {
@@ -385,15 +492,13 @@ class Particle {
     this.vy   = Math.sin(ang) * spd;
     this.r    = .7 + Math.random() * 1.8;
     this.base = .35 + Math.random() * .65;
-    this.hue  = 185 + Math.random() * 45;  // cyan → teal
+    this.hue  = 185 + Math.random() * 45;
     this.t    = Math.random() * Math.PI * 2;
     this.ts   = .008 + Math.random() * .018;
   }
 
   step() {
-    this.x += this.vx;
-    this.y += this.vy;
-    this.t += this.ts;
+    this.x += this.vx; this.y += this.vy; this.t += this.ts;
     if (this.x < -20) this.x = W + 20;
     if (this.x > W+20) this.x = -20;
     if (this.y < -20) this.y = H + 20;
@@ -406,10 +511,9 @@ class Particle {
     ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
     ctx.fillStyle = `hsla(${this.hue},90%,75%,${a})`;
     ctx.fill();
-
     if (a > .75) {
       const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 4);
-      g.addColorStop(0, `hsla(${this.hue},100%,80%,${a * .28})`);
+      g.addColorStop(0, `hsla(${this.hue},100%,80%,${a*.28})`);
       g.addColorStop(1, `hsla(${this.hue},100%,80%,0)`);
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.r * 4, 0, Math.PI * 2);
@@ -451,37 +555,34 @@ document.addEventListener('mousemove', e => {
 
 function drawTrail() {
   for (let i = 0; i < trail.length; i++) {
-    const p   = trail[i];
-    const t   = i / trail.length;
-    const a   = (1 - t) * .65;
-    const sz  = (1 - t) * 4.5;
+    const p  = trail[i];
+    const t  = i / trail.length;
+    const a  = (1 - t) * .65;
+    const sz = (1 - t) * 4.5;
     if (sz < .15) continue;
-
     ctx.beginPath();
     ctx.arc(p.x, p.y, sz, 0, Math.PI * 2);
     ctx.fillStyle = `rgba(0,255,178,${a})`;
     ctx.fill();
-
     if (i < 4) {
       ctx.beginPath();
       ctx.arc(p.x, p.y, sz * .4, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${a * .8})`;
+      ctx.fillStyle = `rgba(255,255,255,${a*.8})`;
       ctx.fill();
     }
-
     if (i < trail.length - 1) {
       const n = trail[i + 1];
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
       ctx.lineTo(n.x, n.y);
-      ctx.strokeStyle = `rgba(0,255,178,${a * .45})`;
+      ctx.strokeStyle = `rgba(0,255,178,${a*.45})`;
       ctx.lineWidth = sz * .5;
       ctx.stroke();
     }
   }
 }
 
-// ── Nebula fog blobs ───────────────────────────────────────────────────────
+// ── Nebula fog ────────────────────────────────────────────────────────────
 function drawNebula() {
   const blobs = [
     { x: W*.12, y: H*.2,  r: Math.min(W,H)*.4,  hue: 200 },
@@ -503,7 +604,6 @@ function drawNebula() {
 function loop() {
   ctx.fillStyle = 'rgba(2,5,9,.82)';
   ctx.fillRect(0, 0, W, H);
-
   drawNebula();
   drawLines();
   particles.forEach(p => { p.step(); p.draw(); });
@@ -517,18 +617,15 @@ const FORMSPREE_ID = 'mqeoqwgo';
 
 document.getElementById('wl').addEventListener('submit', async e => {
   e.preventDefault();
-  const form = e.currentTarget;
+  const form  = e.currentTarget;
   const email = document.getElementById('email').value.trim();
-
   form.style.cssText = 'opacity:.25;pointer-events:none;';
-
   try {
     const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
       method: 'POST',
       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
     });
-
     if (res.ok) {
       document.getElementById('ok').classList.add('show');
     } else {
