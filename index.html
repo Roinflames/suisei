@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comet — Automatización judicial e inteligencia procesal para el PJUD</title>
+  <meta name="description" content="Monitorea tus causas en el PJUD en tiempo real, descarga escritos en PDF de forma automática y recibe alertas sin scraping manual. Para estudios jurídicos, aseguradoras y empresas en Chile.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://suisei.cl/">
+
+  <!-- Open Graph / WhatsApp / LinkedIn -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://suisei.cl/">
+  <meta property="og:title"       content="Comet — Automatización judicial para el PJUD">
+  <meta property="og:description" content="Monitor en tiempo real, PDFs automatizados y colas resilientes para el PJUD. ¿Cansado de capturar causas a mano? Únete a la lista de espera.">
+  <meta property="og:site_name"   content="Comet · suisei.cl">
+  <meta property="og:locale"      content="es_CL">
+
+  <!-- Favicon (SVG inline) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23020509'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='20' fill='%2300FFB2'>☄</text></svg>">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Comet",
+    "url": "https://suisei.cl",
+    "description": "Automatización judicial e inteligencia procesal para el PJUD. Monitor en tiempo real, descarga de PDFs y colas resilientes para estudios jurídicos, aseguradoras y empresas en Chile.",
+    "applicationCategory": "LegalApplication",
+    "operatingSystem": "Web",
+    "inLanguage": "es-CL",
+    "provider": {
+      "@type": "Organization",
+      "name": "Comet",
+      "url": "https://suisei.cl"
+    },
+    "offers": {
+      "@type": "Offer",
+      "availability": "https://schema.org/PreOrder"
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:         #020509;
+      --accent:     #00FFB2;
+      --hot:        #FF5E1A;
+      --particle:   #7ECFFF;
+      --text:       #D9EFF5;
+      --text-dim:   rgba(217, 239, 245, 0.38);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      cursor: none;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+    }
+
+    /* ── Custom cursor ──────────────────────────────────────── */
+    #cur {
+      position: fixed;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: screen;
+      box-shadow: 0 0 10px var(--accent), 0 0 22px var(--accent);
+      transition: width .12s, height .12s;
+    }
+    body:has(button:hover) #cur,
+    body:has(input:focus) #cur,
+    body:has(a:hover) #cur { width: 14px; height: 14px; }
+
+    /* ── Hero ───────────────────────────────────────────────── */
+    .hero {
+      position: relative; z-index: 10;
+      width: 100%; height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      padding: 2rem;
+      gap: 0;
+    }
+
+    /* ── Wordmark ────────────────────────────────────────────── */
+    .wordmark {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(5rem, 16vw, 14rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.85;
+      background: linear-gradient(130deg, #FFFFFF 0%, #7ECFFF 38%, #00FFB2 72%, #FF5E1A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 50px rgba(0, 255, 178, 0.25));
+      opacity: 0;
+      animation: rise .9s cubic-bezier(.16,1,.3,1) .2s forwards;
+      position: relative;
+    }
+
+    .wordmark::before {
+      content: 'COMET';
+      position: absolute; inset: 0;
+      background: linear-gradient(130deg, #FFFFFF 0%, #7ECFFF 38%, #00FFB2 72%, #FF5E1A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: blur(28px) opacity(.35);
+      z-index: -1;
+    }
+
+    /* ── Over/sub text ────────────────────────────────────────── */
+    .eyebrow {
+      font-size: clamp(.65rem, 1.3vw, .8rem);
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1.4rem;
+      opacity: 0;
+      animation: rise .8s cubic-bezier(.16,1,.3,1) .55s forwards;
+    }
+
+    .tagline {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(.95rem, 2.4vw, 1.65rem);
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--text);
+      margin-top: 1.6rem;
+      margin-bottom: 1.6rem;
+      max-width: 560px;
+      opacity: 0;
+      animation: rise .8s cubic-bezier(.16,1,.3,1) .75s forwards;
+    }
+
+    .tagline em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    /* ── Feature pills ──────────────────────────────────────── */
+    .features {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 540px;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: rise .8s cubic-bezier(.16,1,.3,1) .88s forwards;
+    }
+
+    .feat {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: clamp(.6rem, 1.1vw, .72rem);
+      color: var(--text-dim);
+      letter-spacing: .05em;
+      border: 1px solid rgba(126, 207, 255, 0.12);
+      border-radius: 2px;
+      padding: .35rem .7rem;
+      backdrop-filter: blur(6px);
+      background: rgba(8, 18, 32, 0.4);
+    }
+
+    .feat-icon { color: var(--accent); }
+
+    /* ── Waitlist form ──────────────────────────────────────── */
+    .form-wrap {
+      opacity: 0;
+      animation: rise .8s cubic-bezier(.16,1,.3,1) 1.05s forwards;
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .waitlist {
+      display: flex;
+      width: 100%;
+    }
+
+    .waitlist input[type="email"] {
+      flex: 1;
+      background: rgba(8, 18, 32, 0.75);
+      border: 1px solid rgba(126, 207, 255, 0.22);
+      border-right: none;
+      border-radius: 3px 0 0 3px;
+      padding: .85rem 1.2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: .82rem;
+      color: var(--text);
+      outline: none;
+      backdrop-filter: blur(12px);
+      transition: border-color .25s, box-shadow .25s;
+      cursor: none;
+    }
+    .waitlist input::placeholder { color: var(--text-dim); }
+    .waitlist input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 22px rgba(0, 255, 178, .14),
+                  inset 0 0 12px rgba(0, 255, 178, .05);
+    }
+
+    .waitlist button {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 0 3px 3px 0;
+      padding: .85rem 1.5rem;
+      font-family: 'Unbounded', sans-serif;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      cursor: none;
+      transition: background .2s, box-shadow .2s, transform .1s;
+      white-space: nowrap;
+    }
+    .waitlist button:hover {
+      background: #33FFBE;
+      box-shadow: 0 0 32px rgba(0, 255, 178, .55);
+    }
+    .waitlist button:active { transform: scale(.97); }
+
+    .ok {
+      display: none;
+      margin-top: .9rem;
+      color: var(--accent);
+      font-size: .78rem;
+      letter-spacing: .06em;
+    }
+    .ok.show {
+      display: block;
+      animation: rise .5s ease;
+    }
+
+    .demo-link {
+      display: inline-block;
+      margin-top: .85rem;
+      font-size: .7rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: .07em;
+      transition: color .2s;
+      cursor: none;
+    }
+    .demo-link:hover { color: var(--accent); }
+
+    /* ── Bottom bar ─────────────────────────────────────────── */
+    .bar {
+      position: fixed;
+      bottom: 2rem; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 2.8rem;
+      z-index: 10;
+      opacity: 0;
+      animation: rise .6s ease 1.4s forwards;
+    }
+
+    .pulse-dot {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      font-size: .65rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .pulse-dot::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 7px var(--accent);
+      animation: blink 2.2s ease infinite;
+    }
+
+    .domain-badge {
+      font-size: .65rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ── Keyframes ──────────────────────────────────────────── */
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .25; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cur"></div>
+<canvas id="c"></canvas>
+
+<main class="hero">
+  <p class="eyebrow">suisei.cl &mdash; Próximamente</p>
+  <h1 class="wordmark">COMET</h1>
+  <p class="tagline">Automatización judicial e<br><em>inteligencia procesal para el PJUD.</em></p>
+
+  <div class="features" aria-label="Características">
+    <span class="feat"><span class="feat-icon">◈</span> Monitor en tiempo real</span>
+    <span class="feat"><span class="feat-icon">◈</span> PDFs automatizados</span>
+    <span class="feat"><span class="feat-icon">◈</span> Colas resilientes</span>
+  </div>
+
+  <div class="form-wrap">
+    <form class="waitlist" id="wl">
+      <input type="email" id="email" placeholder="tu@email.com" required autocomplete="off">
+      <button type="submit">ÚNETE</button>
+    </form>
+    <p class="ok" id="ok">✦ En órbita. Te avisamos cuando aterricemos.</p>
+    <a class="demo-link" href="https://wa.me/56964388698?text=Hola%2C%20quiero%20ver%20el%20demo%20de%20Comet" target="_blank" rel="noopener">
+      Pide un demo por WhatsApp →
+    </a>
+  </div>
+</main>
+
+<footer class="bar">
+  <span class="pulse-dot">Sistema activo</span>
+  <span class="domain-badge">suisei.cl</span>
+</footer>
+
+<script>
+// ── Cursor ─────────────────────────────────────────────────────────────────
+const cur = document.getElementById('cur');
+let mx = -200, my = -200;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px';
+  cur.style.top  = my + 'px';
+});
+
+// ── Canvas setup ───────────────────────────────────────────────────────────
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+let W, H;
+
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', () => { resize(); spawnParticles(); });
+
+// ── Particles ──────────────────────────────────────────────────────────────
+const COUNT      = Math.min(Math.floor((W * H) / 7500), 130);
+const DIST       = 140;
+const TRAIL_MAX  = 40;
+let particles    = [];
+let trail        = [];
+
+class Particle {
+  constructor(initial) {
+    this.x    = Math.random() * W;
+    this.y    = initial ? Math.random() * H : (Math.random() < .5 ? -6 : H + 6);
+    const spd = .18 + Math.random() * .55;
+    const ang = Math.random() * Math.PI * 2;
+    this.vx   = Math.cos(ang) * spd;
+    this.vy   = Math.sin(ang) * spd;
+    this.r    = .7 + Math.random() * 1.8;
+    this.base = .35 + Math.random() * .65;
+    this.hue  = 185 + Math.random() * 45;  // cyan → teal
+    this.t    = Math.random() * Math.PI * 2;
+    this.ts   = .008 + Math.random() * .018;
+  }
+
+  step() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.t += this.ts;
+    if (this.x < -20) this.x = W + 20;
+    if (this.x > W+20) this.x = -20;
+    if (this.y < -20) this.y = H + 20;
+    if (this.y > H+20) this.y = -20;
+  }
+
+  draw() {
+    const a = this.base * (.8 + .2 * Math.sin(this.t));
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${this.hue},90%,75%,${a})`;
+    ctx.fill();
+
+    if (a > .75) {
+      const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 4);
+      g.addColorStop(0, `hsla(${this.hue},100%,80%,${a * .28})`);
+      g.addColorStop(1, `hsla(${this.hue},100%,80%,0)`);
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r * 4, 0, Math.PI * 2);
+      ctx.fillStyle = g;
+      ctx.fill();
+    }
+  }
+}
+
+function spawnParticles() {
+  particles = Array.from({ length: COUNT }, (_, i) => new Particle(i < COUNT));
+}
+spawnParticles();
+
+// ── Connection lines ───────────────────────────────────────────────────────
+function drawLines() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const d  = Math.sqrt(dx*dx + dy*dy);
+      if (d < DIST) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(126,207,255,${(1 - d/DIST) * .22})`;
+        ctx.lineWidth = .5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+// ── Cursor comet trail ─────────────────────────────────────────────────────
+document.addEventListener('mousemove', e => {
+  trail.unshift({ x: e.clientX, y: e.clientY });
+  if (trail.length > TRAIL_MAX) trail.pop();
+});
+
+function drawTrail() {
+  for (let i = 0; i < trail.length; i++) {
+    const p   = trail[i];
+    const t   = i / trail.length;
+    const a   = (1 - t) * .65;
+    const sz  = (1 - t) * 4.5;
+    if (sz < .15) continue;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, sz, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0,255,178,${a})`;
+    ctx.fill();
+
+    if (i < 4) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, sz * .4, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${a * .8})`;
+      ctx.fill();
+    }
+
+    if (i < trail.length - 1) {
+      const n = trail[i + 1];
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(n.x, n.y);
+      ctx.strokeStyle = `rgba(0,255,178,${a * .45})`;
+      ctx.lineWidth = sz * .5;
+      ctx.stroke();
+    }
+  }
+}
+
+// ── Nebula fog blobs ───────────────────────────────────────────────────────
+function drawNebula() {
+  const blobs = [
+    { x: W*.12, y: H*.2,  r: Math.min(W,H)*.4,  hue: 200 },
+    { x: W*.88, y: H*.75, r: Math.min(W,H)*.32, hue: 160 },
+    { x: W*.5,  y: H*.5,  r: Math.min(W,H)*.22, hue: 220 },
+  ];
+  for (const b of blobs) {
+    const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+    g.addColorStop(0, `hsla(${b.hue},75%,18%,.045)`);
+    g.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+    ctx.fillStyle = g;
+    ctx.fill();
+  }
+}
+
+// ── Render loop ────────────────────────────────────────────────────────────
+function loop() {
+  ctx.fillStyle = 'rgba(2,5,9,.82)';
+  ctx.fillRect(0, 0, W, H);
+
+  drawNebula();
+  drawLines();
+  particles.forEach(p => { p.step(); p.draw(); });
+  drawTrail();
+  requestAnimationFrame(loop);
+}
+loop();
+
+// ── Waitlist form ──────────────────────────────────────────────────────────
+const FORMSPREE_ID = 'mqeoqwgo';
+
+document.getElementById('wl').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.currentTarget;
+  const email = document.getElementById('email').value.trim();
+
+  form.style.cssText = 'opacity:.25;pointer-events:none;';
+
+  try {
+    const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+
+    if (res.ok) {
+      document.getElementById('ok').classList.add('show');
+    } else {
+      form.style.cssText = '';
+      alert('No se pudo registrar el correo. Intenta de nuevo.');
+    }
+  } catch {
+    form.style.cssText = '';
+    alert('Error de red. Intenta de nuevo.');
+  }
+});
+</script>
+</body>
+</html>
