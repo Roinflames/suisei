@@ -7,6 +7,7 @@ Su objetivo es convertir visitas en conversaciones (WhatsApp o formulario).
 - **Dominio:** suisei.cl (Cloudflare). El dominio `prodigital.cl` es de otra empresa.
 - **Contenido:** servicios, forma de trabajo, caso de farmacia (anónimo, sin autorización
   del cliente para nombrarlo) y contacto. Sin precios.
+- **`farmacias.html`** (`/farmacias`): landing para prospección 1:1 de farmacias independientes; CTA solo WhatsApp (etiqueta `[farmacias]`) y correo.
 
 ## Técnico
 

@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Software para farmacias independientes — PRODIGITAL</title>
+  <meta name="description" content="Tu farmacia en internet, conectada a tu sistema de ventas: catálogo con precios y stock al día, cotizaciones que llegan por WhatsApp y farmacia de turno automática.">
+  <link rel="canonical" href="https://suisei.cl/farmacias">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Software para farmacias independientes — PRODIGITAL">
+  <meta property="og:description" content="Deja de contestar precios y stock por teléfono todo el día. Catálogo web conectado a tu sistema de ventas y cotizaciones por WhatsApp.">
+  <meta property="og:url" content="https://suisei.cl/farmacias">
+  <meta property="og:image" content="https://suisei.cl/assets/og-prodigital.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="PRODIGITAL — Menos trabajo administrativo. Más tiempo para tu negocio.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0B1F3A">
+  <meta property="og:locale" content="es_CL">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="preload" href="assets/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    /* Self-hosted so no visitor IP is sent to Google (international transfer under Ley 21.719) */
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/manrope-latin-wght-normal.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
+    @font-face { font-family: "Unbounded"; src: url("assets/fonts/unbounded-latin-wght-normal.woff2") format("woff2"); font-weight: 200 900; font-display: swap; }
+    :root {
+      --navy: #0B1F3A;
+      --navy-2: #13294B;
+      --blue: #0A6FD8;
+      --cyan: #1EC8F2;
+      --coral: #EF4E3A;
+      --ink: #0F1B2D;
+      --muted: #52617A;
+      --line: #DFE6F0;
+      --bg: #FFFFFF;
+      --bg-soft: #F4F7FB;
+      --radius: 14px;
+      --max: 1120px;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: var(--blue); }
+    .wrap { width: min(var(--max), 100% - 32px); margin-inline: auto; }
+    .skip { position: absolute; left: -999px; top: 8px; background: var(--navy); color: #fff; padding: 8px 12px; border-radius: 8px; z-index: 99; }
+    .skip:focus { left: 16px; }
+
+    /* Header */
+    header {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: saturate(140%) blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .brand img { width: 38px; height: auto; }
+    .brand span { font-family: "Unbounded", "Manrope", sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: .02em; color: var(--navy); }
+    .brand span b { color: var(--blue); font-weight: 600; }
+    .nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+    .nav ul a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: .95rem; }
+    .nav ul a:hover { color: var(--blue); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 20px; border-radius: 999px; font-weight: 700; font-size: .95rem;
+      text-decoration: none; border: 2px solid transparent; cursor: pointer; font-family: inherit;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover { background: #075BB4; }
+    .btn-ghost { border-color: var(--line); color: var(--navy); background: #fff; }
+    .btn-ghost:hover { border-color: var(--blue); }
+    .btn-wa { background: #1FA855; color: #fff; }
+    .btn-wa:hover { background: #178A45; }
+    .nav .btn { padding: 9px 16px; }
+
+    /* Hero */
+    .hero {
+      position: relative; overflow: hidden; color: #DCE6F5;
+      background:
+        radial-gradient(60% 70% at 78% 40%, rgba(30,200,242,.16) 0%, rgba(30,200,242,0) 60%),
+        radial-gradient(50% 60% at 10% 100%, rgba(10,111,216,.22) 0%, rgba(10,111,216,0) 70%),
+        linear-gradient(180deg, #071427 0%, var(--navy) 100%);
+    }
+    .starfield { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.15fr .85fr; gap: 48px; align-items: center; padding: 88px 0 96px; }
+    .eyebrow { display: inline-block; font-size: .8rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--blue); margin-bottom: 18px; }
+    .hero .eyebrow { color: var(--cyan); }
+    h1 { font-family: "Unbounded", "Manrope", sans-serif; font-weight: 700; font-size: clamp(1.85rem, 4vw, 3rem); line-height: 1.12; margin: 0 0 22px; color: #fff; letter-spacing: -.02em; }
+    h1 em { font-style: normal; background: linear-gradient(90deg, #4FA8FF, var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lead { font-size: 1.15rem; color: var(--muted); max-width: 34em; margin: 0 0 32px; }
+    .hero .lead { color: #AFC0DA; }
+    .hero .btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.35); }
+    .hero .btn-ghost:hover { border-color: var(--cyan); }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    /* Hero illustration: what the pharmacy receives */
+    .quote-demo { margin: 0; position: relative; justify-self: center; width: min(360px, 100%); }
+    .pixels { position: absolute; inset: 0; pointer-events: none; }
+    .pixels i { position: absolute; display: block; border-radius: 3px; opacity: .85; animation: drift 6s ease-in-out infinite; }
+    @keyframes drift { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .bubble {
+      position: relative; z-index: 1; background: #fff; color: var(--ink); border-radius: 18px 18px 18px 4px;
+      padding: 20px 22px; box-shadow: 0 0 48px rgba(30,200,242,.25), 0 18px 40px rgba(0,0,0,.25); font-size: .95rem;
+    }
+    .bubble .from { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #178A45; font-size: .85rem; margin-bottom: 10px; }
+    .bubble p { margin: 0 0 8px; }
+    .bubble ol { margin: 0 0 10px; padding-left: 20px; }
+    .bubble ol li { margin-bottom: 2px; }
+    .bubble .ph { display: inline-block; height: .7em; border-radius: 4px; background: #E3EAF3; vertical-align: middle; }
+    .bubble .ok { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--blue); font-size: .88rem; }
+    .demo-note { position: relative; z-index: 1; margin: 10px 0 0; font-size: .78rem; color: #93A6C4; text-align: center; }
+    @media (prefers-reduced-motion: reduce) { .pixels i { animation: none; } html { scroll-behavior: auto; } .btn:hover { transform: none; } }
+
+    /* Sections */
+    section { padding: 88px 0; }
+    .section-head { max-width: 640px; margin-bottom: 44px; }
+    h2 { font-family: "Unbounded", "Manrope", sans-serif; font-weight: 600; font-size: clamp(1.45rem, 2.8vw, 2rem); line-height: 1.25; margin: 0 0 12px; color: var(--navy); letter-spacing: -.01em; }
+    .section-head p { color: var(--muted); margin: 0; font-size: 1.05rem; }
+    .soft { background: var(--bg-soft); }
+
+    .pains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .pain { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--coral); border-radius: var(--radius); padding: 24px; }
+    .pain h3 { margin: 0 0 6px; font-size: 1.05rem; color: var(--navy); }
+    .pain p { margin: 0; color: var(--muted); font-size: .95rem; }
+
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .card {
+      background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 28px; transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .card:hover { border-color: #B9D3F2; box-shadow: 0 12px 30px rgba(11,31,58,.06); }
+    .card .ico { width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; margin-bottom: 18px; background: #EAF3FD; color: var(--blue); }
+    .card h3 { margin: 0 0 8px; font-size: 1.15rem; color: var(--navy); }
+    .card p { margin: 0; color: var(--muted); }
+    .card ul { margin: 10px 0 0; padding-left: 18px; color: var(--ink); font-size: .95rem; }
+    .card.featured { border-color: var(--blue); background: linear-gradient(180deg, #F5FAFF 0%, #FFFFFF 70%); }
+
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: step; }
+    .step { position: relative; padding: 24px; background: #fff; border-radius: var(--radius); border: 1px solid var(--line); }
+    .step::before {
+      counter-increment: step; content: counter(step, decimal-leading-zero);
+      display: block; font-weight: 800; font-size: .9rem; color: var(--blue); margin-bottom: 10px; letter-spacing: .06em;
+    }
+    .step h3 { margin: 0 0 6px; font-size: 1.05rem; color: var(--navy); }
+    .step p { margin: 0; color: var(--muted); font-size: .95rem; }
+
+    .case > div { position: relative; z-index: 1; }
+    .case { display: grid; grid-template-columns: .9fr 1.1fr; gap: 40px; align-items: center; background: var(--navy); color: #DCE6F5; border-radius: 22px; padding: 48px; position: relative; overflow: hidden; }
+    .case h2 { color: #fff; }
+    .case .eyebrow { color: var(--cyan); }
+    .case p { margin: 0 0 12px; }
+    .case ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+    .case li { display: flex; gap: 12px; align-items: flex-start; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 14px 16px; }
+    .case li svg { flex: none; margin-top: 3px; color: var(--cyan); }
+    .case .note { font-size: .85rem; color: #93A6C4; margin-top: 16px; }
+
+    .founder { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; max-width: 760px; }
+    .founder img { width: 112px; height: 112px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 0 0 2px var(--line), 0 12px 28px rgba(11,31,58,.12); }
+    .founder p { color: var(--muted); margin: 0 0 8px; }
+    .founder p strong { color: var(--navy); }
+    #quien { padding-top: 0; }
+
+    .faq { max-width: 760px; display: grid; gap: 12px; }
+    .faq details { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 0 22px; }
+    .faq details[open] { border-color: #B9D3F2; }
+    .faq summary { cursor: pointer; list-style: none; padding: 18px 28px 18px 0; position: relative; font-weight: 700; color: var(--navy); }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 1.4rem; font-weight: 600; color: var(--blue); }
+    .faq details[open] summary::after { content: "–"; }
+    .faq details p { margin: 0 0 18px; color: var(--muted); }
+
+    .final { text-align: center; }
+    .final .section-head { margin-inline: auto; margin-bottom: 28px; }
+    .final .cta-row { justify-content: center; }
+    .final .mail { margin: 18px 0 0; color: var(--muted); }
+
+    .btn:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px solid rgba(10,111,216,.35); outline-offset: 2px; }
+    .hero a:focus-visible { outline-color: rgba(30,200,242,.7); }
+
+    footer { border-top: 1px solid var(--line); padding: 32px 0; color: var(--muted); font-size: .9rem; }
+    .foot { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center; }
+    .foot .tagline { letter-spacing: .22em; text-transform: uppercase; font-size: .72rem; color: var(--navy); font-weight: 700; }
+
+    .wa-float {
+      position: fixed; right: 18px; bottom: 18px; z-index: 30; width: 56px; height: 56px; border-radius: 50%;
+      display: grid; place-items: center; background: #1FA855; color: #fff; box-shadow: 0 10px 24px rgba(0,0,0,.18);
+    }
+
+    @media (max-width: 900px) {
+      .nav ul { display: none; }
+      .hero-grid, .case { grid-template-columns: 1fr; }
+      .hero-grid { padding: 56px 0 64px; gap: 40px; }
+      .quote-demo { justify-self: start; }
+      .pains, .features { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .case { padding: 32px 24px; }
+      section { padding: 64px 0; }
+    }
+    @media (max-width: 560px) {
+      .steps { grid-template-columns: 1fr; }
+      .founder { grid-template-columns: 1fr; gap: 16px; }
+      .founder img { width: 96px; height: 96px; }
+      .nav .btn span { display: none; }
+      .cta-row .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="./" aria-label="PRODIGITAL, ir al sitio principal">
+        <img src="assets/icon-prodigital.png" alt="" width="38" height="35">
+        <span>PRO<b>DIGITAL</b></span>
+      </a>
+      <nav aria-label="Principal">
+        <ul>
+          <li><a href="#que-incluye">Qué incluye</a></li>
+          <li><a href="#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="#preguntas">Preguntas</a></li>
+          <li><a href="./">Sitio principal</a></li>
+        </ul>
+      </nav>
+      <a class="btn btn-wa" href="https://wa.me/56964388698?text=Hola%20PRODIGITAL%2C%20tengo%20una%20farmacia%20y%20quiero%20saber%20m%C3%A1s%20%5Bfarmacias%5D" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg>
+        <span>WhatsApp</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <canvas class="starfield" data-density="1" aria-hidden="true"></canvas>
+      <div class="wrap hero-grid">
+        <div>
+          <span class="eyebrow">Software para farmacias independientes</span>
+          <h1 id="hero-title">Deja de contestar precios y stock por teléfono <em>todo el día.</em></h1>
+          <p class="lead">Tus clientes buscan en tu sitio web si tienes un producto y a cuánto, con precios y stock que se actualizan solos desde tu sistema de ventas. Cuando quieren algo, la cotización te llega ordenada por WhatsApp para que tú la confirmes.</p>
+          <div class="cta-row">
+            <a class="btn btn-wa" href="https://wa.me/56964388698?text=Hola%20PRODIGITAL%2C%20tengo%20una%20farmacia%20y%20quiero%20saber%20m%C3%A1s%20%5Bfarmacias%5D" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg>
+              Escríbenos por WhatsApp
+            </a>
+            <a class="btn btn-ghost" href="#que-incluye">Ver cómo funciona</a>
+          </div>
+        </div>
+        <figure class="quote-demo" aria-label="Ejemplo ilustrativo de una cotización que llega por WhatsApp">
+          <div class="pixels" aria-hidden="true">
+            <i style="width:14px;height:14px;left:-6%;top:12%;background:var(--cyan);animation-delay:-1s"></i>
+            <i style="width:18px;height:18px;left:-10%;top:52%;background:var(--blue);animation-delay:-2.5s"></i>
+            <i style="width:9px;height:9px;right:-4%;top:6%;background:var(--cyan);animation-delay:-4s"></i>
+            <i style="width:12px;height:12px;right:-6%;bottom:18%;background:var(--coral);animation-delay:-3s"></i>
+          </div>
+          <div class="bubble">
+            <div class="from">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
+              Nueva cotización desde tu web
+            </div>
+            <p>Hola, quiero cotizar:</p>
+            <ol>
+              <li><span class="ph" style="width:60%" aria-hidden="true"></span> <span>× 2</span></li>
+              <li><span class="ph" style="width:48%" aria-hidden="true"></span> <span>× 1</span></li>
+              <li><span class="ph" style="width:66%" aria-hidden="true"></span> <span>× 1</span></li>
+            </ol>
+            <span class="ok">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              Tú revisas y confirmas
+            </span>
+          </div>
+          <figcaption class="demo-note">Ejemplo ilustrativo</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="problema" class="soft" aria-labelledby="problema-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="problema-title">¿Te suena familiar?</h2>
+          <p>Una farmacia independiente compite con cadenas que tienen buscador en línea, pero con un equipo mucho más chico.</p>
+        </div>
+        <div class="pains">
+          <div class="pain">
+            <h3>El teléfono no para</h3>
+            <p>"¿Tienen tal producto?", "¿a cuánto está?". Las mismas preguntas todo el día, por teléfono, WhatsApp y redes sociales, mientras atiendes el mesón.</p>
+          </div>
+          <div class="pain">
+            <h3>Tus clientes buscan en internet</h3>
+            <p>Antes de salir de casa revisan precios en línea. Si tu farmacia no aparece, la consulta se va a otro lado.</p>
+          </div>
+          <div class="pain">
+            <h3>Mantener una web a mano no es viable</h3>
+            <p>Los precios y el stock cambian todos los días. Una página que hay que actualizar a mano queda desactualizada en una semana.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="que-incluye" aria-labelledby="incluye-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="incluye-title">Qué incluye</h2>
+          <p>Una plataforma web para tu farmacia, conectada a tu sistema de ventas. Tú sigues vendiendo como siempre; la web se mantiene al día sola.</p>
+        </div>
+        <div class="features">
+          <article class="card featured">
+            <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+            <h3>Catálogo web con buscador</h3>
+            <p>Tus clientes buscan por nombre y ven si tienes el producto y a qué precio, desde el celular o el computador.</p>
+          </article>
+          <article class="card featured">
+            <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.5 6.3L3 16"/><path d="M3 12a9 9 0 0 1 15.5-6.3L21 8"/><path d="M21 3v5h-5M3 21v-5h5"/></svg></div>
+            <h3>Precios y stock al día, solos</h3>
+            <p>Se sincronizan automáticamente desde tu sistema de ventas, sea Facto u otro. No tienes que cargar nada dos veces.</p>
+          </article>
+          <article class="card featured">
+            <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 8h8M8 12h5"/></svg></div>
+            <h3>Carrito de cotización por WhatsApp</h3>
+            <p>El cliente arma su lista y te llega como un mensaje ordenado de WhatsApp. Tú revisas y confirmas; no hay pagos en la web.</p>
+          </article>
+          <article class="card">
+            <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+            <h3>Farmacia de turno automática</h3>
+            <p>La web muestra cada día la farmacia de turno, sin que tengas que actualizarla.</p>
+          </article>
+          <article class="card">
+            <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div>
+            <h3>Índice UV del día</h3>
+            <p>Un indicador con el índice de radiación UV, como información de utilidad para quienes visitan tu web.</p>
+          </article>
+          <article class="card">
+            <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg></div>
+            <h3>Panel de administración</h3>
+            <p>Tu propio panel para gestionar lo que muestra la web:</p>
+            <ul>
+              <li>Inventario</li>
+              <li>Usuarios</li>
+              <li>Resolución SEREMI visible en la web</li>
+              <li>Turnos</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="como-trabajamos" class="soft" aria-labelledby="como-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="como-title">Cómo trabajamos</h2>
+          <p>Sin desarrollos indefinidos: sabes qué se entrega, cuándo y cuánto cuesta antes de empezar.</p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <h3>Primera conversación</h3>
+            <p>Conversamos 30 minutos sobre cómo funciona hoy tu farmacia y qué sistema de ventas usas. Sin compromiso.</p>
+          </div>
+          <div class="step">
+            <h3>Propuesta</h3>
+            <p>Alcance, plazos y precio fijo por escrito.</p>
+          </div>
+          <div class="step">
+            <h3>Puesta en marcha</h3>
+            <p>Conectamos tu sistema de ventas, configuramos tu catálogo y dejamos la web funcionando.</p>
+          </div>
+          <div class="step">
+            <h3>Soporte</h3>
+            <p>Te enseñamos a usar el panel y te acompañamos después de la entrega.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="caso" aria-labelledby="caso-title">
+      <div class="wrap">
+        <div class="case">
+          <canvas class="starfield" data-density=".6" aria-hidden="true"></canvas>
+          <div>
+            <span class="eyebrow">Caso real</span>
+            <h2 id="caso-title">Una farmacia independiente que dejó de contestar precios a mano</h2>
+            <p>La farmacia recibía todo el día consultas por teléfono y redes sociales preguntando si tenían un producto y a cuánto. Construimos su plataforma web conectada a su sistema de ventas, para que sus clientes revisen precios y armen su cotización por su cuenta.</p>
+          </div>
+          <div>
+            <ul>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Catálogo con precios propios, sincronizado desde el sistema de ventas</span></li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Carrito de cotización que termina en un mensaje de WhatsApp listo para confirmar</span></li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Farmacia de turno automática e índice UV del día</span></li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Panel de administración propio: inventario, usuarios, resolución SEREMI y turnos</span></li>
+            </ul>
+            <p class="note">Mantenemos el nombre del cliente en reserva. Te mostramos la plataforma funcionando en una reunión.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quien" aria-labelledby="quien-title">
+      <div class="wrap founder">
+        <img src="assets/rodrigo-reyes.webp" alt="Rodrigo Reyes, fundador de PRODIGITAL" width="112" height="112" loading="lazy">
+        <div>
+          <h2 id="quien-title" style="font-size:1.2rem;margin-bottom:6px">Hablas directamente con quien lo construye</h2>
+          <p>Soy <strong>Rodrigo Reyes</strong>, fundador de PRODIGITAL e Ingeniero Civil en Computación. Yo hago el diagnóstico, escribo la propuesta y respondo por lo que se entrega.</p>
+          <a href="./#quien">Conoce más sobre PRODIGITAL →</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="preguntas" class="soft" aria-labelledby="preguntas-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="preguntas-title">Preguntas frecuentes</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>¿Necesito cambiar mi sistema de ventas?</summary>
+            <p>No. La plataforma se conecta a tu sistema de ventas y toma de ahí los precios y el stock. Ya trabajamos con Facto y también integramos otros sistemas de facturación o punto de venta: en una primera conversación revisamos cómo entrega los datos el tuyo y te proponemos cómo conectarlo.</p>
+          </details>
+          <details>
+            <summary>¿Tengo que actualizar los precios a mano?</summary>
+            <p>No. Los precios y el stock se sincronizan automáticamente desde tu sistema de ventas. No tienes que cargar nada dos veces.</p>
+          </details>
+          <details>
+            <summary>¿Los clientes pagan en la web?</summary>
+            <p>No. La web no cobra: el cliente arma una cotización y te la envía por WhatsApp. Tú la revisas, la confirmas y coordinas la venta como lo haces hoy.</p>
+          </details>
+          <details>
+            <summary>¿Quién mantiene la web al día?</summary>
+            <p>Los precios, el stock y la farmacia de turno se actualizan solos. Lo demás —inventario, usuarios, turnos y la resolución SEREMI— lo gestionas tú desde tu panel de administración.</p>
+          </details>
+          <details>
+            <summary>¿Cuánto cuesta?</summary>
+            <p>Depende de cómo funciona tu farmacia y de tu sistema de ventas. Después de una primera conversación te enviamos una propuesta por escrito con alcance, plazos y precio fijo.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" class="final" aria-labelledby="contacto-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="contacto-title">¿Conversamos sobre tu farmacia?</h2>
+          <p>Escríbenos y agendamos una conversación de 30 minutos, sin compromiso. Te respondemos con una propuesta concreta o con un "esto no es para ti" honesto.</p>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-wa" href="https://wa.me/56964388698?text=Hola%20PRODIGITAL%2C%20tengo%20una%20farmacia%20y%20quiero%20saber%20m%C3%A1s%20%5Bfarmacias%5D" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg>
+            Escríbenos por WhatsApp
+          </a>
+        </div>
+        <p class="mail">o al correo <a href="mailto:contacto@suisei.cl">contacto@suisei.cl</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <span>© <span id="year">2026</span> PRODIGITAL SpA · RUT 78.437.291-K · La Florida, Santiago · <a href="privacidad.html">Privacidad</a></span>
+      <span class="tagline">Tecnología que impulsa personas</span>
+    </div>
+  </footer>
+
+  <a class="wa-float" href="https://wa.me/56964388698?text=Hola%20PRODIGITAL%2C%20tengo%20una%20farmacia%20y%20quiero%20saber%20m%C3%A1s%20%5Bfarmacias%5D" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg>
+  </a>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Starfield in brand colors: twinkling stars with a few constellation links (same as index.html).
+    (() => {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const colors = ['255,255,255', '30,200,242', '79,168,255'];
+
+      document.querySelectorAll('canvas.starfield').forEach((canvas) => {
+        const ctx = canvas.getContext('2d');
+        const density = parseFloat(canvas.dataset.density) || 1;
+        let stars = [], links = [], w = 0, h = 0, raf = 0, visible = true;
+
+        const build = () => {
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          w = canvas.clientWidth; h = canvas.clientHeight;
+          canvas.width = w * dpr; canvas.height = h * dpr;
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          const n = Math.round((w * h) / 5200 * density);
+          stars = Array.from({ length: n }, () => ({
+            x: Math.random() * w, y: Math.random() * h,
+            r: Math.random() * 1.3 + 0.3,
+            c: colors[Math.random() < 0.6 ? 0 : Math.random() < 0.5 ? 1 : 2],
+            p: Math.random() * Math.PI * 2,
+            s: 0.6 + Math.random() * 1.4,
+            vx: (Math.random() - 0.5) * 0.04
+          }));
+          links = [];
+          const bright = stars.filter((st) => st.r > 1.1);
+          for (let i = 0; i < bright.length; i++) {
+            for (let j = i + 1; j < bright.length; j++) {
+              const dx = bright[i].x - bright[j].x, dy = bright[i].y - bright[j].y;
+              if (dx * dx + dy * dy < 120 * 120 && links.length < 14) links.push([bright[i], bright[j]]);
+            }
+          }
+        };
+
+        const draw = (t) => {
+          ctx.clearRect(0, 0, w, h);
+          ctx.lineWidth = 0.6;
+          for (const [a, b] of links) {
+            ctx.strokeStyle = 'rgba(30,200,242,0.14)';
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+          for (const st of stars) {
+            const tw = reduce ? 0.8 : 0.45 + 0.55 * Math.abs(Math.sin(st.p + t * 0.0006 * st.s));
+            if (!reduce) { st.x += st.vx; if (st.x < 0) st.x = w; if (st.x > w) st.x = 0; }
+            ctx.fillStyle = `rgba(${st.c},${tw})`;
+            ctx.beginPath(); ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2); ctx.fill();
+          }
+        };
+
+        const loop = (t) => { draw(t); if (visible && !reduce) raf = requestAnimationFrame(loop); };
+        const start = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); };
+
+        build(); start();
+        let resizeTimer;
+        window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { build(); start(); }, 150); });
+        new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) start(); }).observe(canvas);
+      });
+    })();
+  </script>
+</body>
+</html>
