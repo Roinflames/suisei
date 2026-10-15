@@ -31,6 +31,13 @@
     "taxID": "78.437.291-K",
     "legalName": "PRODIGITAL SpA",
     "telephone": "+56964388698",
+    "founder": {
+      "@type": "Person",
+      "name": "Rodrigo Reyes",
+      "jobTitle": "Fundador",
+      "image": "https://suisei.cl/assets/rodrigo-reyes.webp",
+      "sameAs": ["https://www.linkedin.com/in/rreyess/"]
+    },
     "address": { "@type": "PostalAddress", "addressLocality": "La Florida", "addressRegion": "Región Metropolitana", "addressCountry": "CL" }
   }
   </script>
@@ -169,6 +176,14 @@
     .case li svg { flex: none; margin-top: 3px; color: var(--cyan); }
     .case .note { font-size: .85rem; color: #93A6C4; margin-top: 16px; }
 
+    #quien { padding-top: 0; }
+    .founder { display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: center; max-width: 880px; }
+    .founder img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 0 0 2px var(--line), 0 16px 36px rgba(11,31,58,.12); }
+    .founder h2 { margin-bottom: 4px; }
+    .founder .role { margin: 0 0 16px; color: var(--blue); font-weight: 700; }
+    .founder p { color: var(--muted); margin: 0 0 12px; }
+    .founder .in { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; text-decoration: none; margin-top: 4px; }
+
     .contact-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 48px; align-items: start; }
     .contact-info p { color: var(--muted); }
     .contact-list { list-style: none; padding: 0; margin: 24px 0 28px; display: grid; gap: 10px; }
@@ -201,7 +216,9 @@
 
     @media (max-width: 900px) {
       .nav ul { display: none; }
-      .hero-grid, .case, .contact-grid { grid-template-columns: 1fr; }
+      .hero-grid, .case, .contact-grid, .founder { grid-template-columns: 1fr; }
+      .founder { gap: 24px; }
+      .founder img { width: 140px; height: 140px; }
       .hero-grid { padding: 56px 0 64px; gap: 32px; }
       .hero-mark { order: -1; width: 180px; justify-self: start; }
       .services { grid-template-columns: 1fr; }
@@ -366,6 +383,23 @@
             </ul>
             <p class="note">Mostramos la plataforma funcionando en una reunión.</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quien" aria-labelledby="quien-title">
+      <div class="wrap founder">
+        <img src="assets/rodrigo-reyes.webp" alt="Rodrigo Reyes, fundador de PRODIGITAL" width="200" height="200" loading="lazy">
+        <div>
+          <span class="eyebrow">Quién está detrás</span>
+          <h2 id="quien-title">Rodrigo Reyes</h2>
+          <p class="role">Fundador · Ingeniero Civil en Computación, UTEM</p>
+          <p>Soy desarrollador backend y me especializo en llevar sistemas a producción: integraciones, automatización y despliegue en la nube.</p>
+          <p>Cuando nos escribes, conversas directamente conmigo. Yo hago el diagnóstico, escribo la propuesta y respondo por lo que se entrega.</p>
+          <a class="in" href="https://www.linkedin.com/in/rreyess/" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5V9.5h3V19zM6.5 8.2a1.7 1.7 0 1 1 0-3.5 1.7 1.7 0 0 1 0 3.5zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5s-1.8 1.2-1.8 2.4V19h-3V9.5h2.9v1.3a3.2 3.2 0 0 1 2.8-1.6c3 0 3.6 2 3.6 4.6V19z"/></svg>
+            Ver perfil en LinkedIn
+          </a>
         </div>
       </div>
     </section>
