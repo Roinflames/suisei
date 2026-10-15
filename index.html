@@ -18,9 +18,7 @@
   <meta name="theme-color" content="#0B1F3A">
   <meta property="og:locale" content="es_CL">
   <link rel="icon" type="image/png" href="assets/favicon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -29,12 +27,17 @@
     "slogan": "Tecnología que impulsa personas",
     "url": "https://suisei.cl/",
     "logo": "https://suisei.cl/assets/logo-prodigital.png",
-    "email": "rod.reyes.s@gmail.com",
+    "email": "contacto@suisei.cl",
+    "taxID": "78.437.291-K",
+    "legalName": "PRODIGITAL SpA",
     "telephone": "+56964388698",
-    "address": { "@type": "PostalAddress", "addressLocality": "Santiago", "addressCountry": "CL" }
+    "address": { "@type": "PostalAddress", "addressLocality": "La Florida", "addressRegion": "Región Metropolitana", "addressCountry": "CL" }
   }
   </script>
   <style>
+    /* Self-hosted so no visitor IP is sent to Google (international transfer under Ley 21.719) */
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/manrope-latin-wght-normal.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
+    @font-face { font-family: "Unbounded"; src: url("assets/fonts/unbounded-latin-wght-normal.woff2") format("woff2"); font-weight: 200 900; font-display: swap; }
     :root {
       --navy: #0B1F3A;
       --navy-2: #13294B;
@@ -181,6 +184,8 @@
     input:focus, textarea:focus, .btn:focus-visible, a:focus-visible { outline: 3px solid rgba(10,111,216,.35); outline-offset: 2px; border-color: var(--blue); }
     textarea { min-height: 120px; resize: vertical; }
     .hp { position: absolute; left: -9999px; }
+    .consent { display: flex; gap: 10px; align-items: flex-start; font-weight: 500; font-size: .85rem; color: var(--muted); }
+    .consent input { width: 18px; height: 18px; margin-top: 3px; flex: none; accent-color: var(--blue); }
     .form-msg { margin: 0; font-weight: 600; min-height: 1.4em; }
     .form-msg.ok { color: #178A45; }
     .form-msg.err { color: var(--coral); }
@@ -244,7 +249,7 @@
           <h1 id="hero-title">Menos trabajo administrativo. <em>Más tiempo para tu negocio.</em></h1>
           <p class="lead">En PRODIGITAL desarrollamos software a medida y automatizamos procesos para empresas chilenas. Partimos de un problema concreto y lo resolvemos con entregables, plazos y precio definidos desde el inicio.</p>
           <div class="cta-row">
-            <a class="btn btn-wa" href="https://wa.me/56964388698?text=Hola%20PRODIGITAL%2C%20quiero%20conversar%20sobre%20un%20proyecto" target="_blank" rel="noopener">
+            <a class="btn btn-wa" href="https://wa.me/56964388698?text=Hola%20PRODIGITAL%2C%20quiero%20conversar%20sobre%20un%20proyecto%20%5Bweb%5D" target="_blank" rel="noopener">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg>
               Escríbenos por WhatsApp
             </a>
@@ -371,8 +376,8 @@
           <h2 id="contacto-title">Conversemos</h2>
           <p>Cuéntanos qué tarea te gustaría dejar de hacer a mano. Te respondemos con una propuesta concreta o con un "esto no es para nosotros" honesto.</p>
           <ul class="contact-list">
-            <li>WhatsApp: <a href="https://wa.me/56964388698" target="_blank" rel="noopener">+56 9 6438 8698</a></li>
-            <li>Correo: <a href="mailto:rod.reyes.s@gmail.com">rod.reyes.s@gmail.com</a></li>
+            <li>WhatsApp: <a href="https://wa.me/56964388698?text=Hola%20PRODIGITAL%20%5Bweb%5D" target="_blank" rel="noopener">+56 9 6438 8698</a></li>
+            <li>Correo: <a href="mailto:contacto@suisei.cl">contacto@suisei.cl</a></li>
             <li>Santiago, Chile</li>
           </ul>
         </div>
@@ -396,6 +401,10 @@
           <label>¿En qué te podemos ayudar?
             <textarea name="mensaje" required></textarea>
           </label>
+          <label class="consent">
+            <input type="checkbox" name="acepta_privacidad" value="si" required>
+            <span>Acepto que PRODIGITAL SpA use estos datos solo para responder mi consulta, según el <a href="privacidad.html">aviso de privacidad</a>. El formulario se procesa en Formspree (EE.UU.).</span>
+          </label>
           <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button class="btn btn-primary" type="submit">Enviar mensaje</button>
           <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
@@ -406,12 +415,12 @@
 
   <footer>
     <div class="wrap foot">
-      <span>© <span id="year">2026</span> PRODIGITAL SpA · Santiago, Chile</span>
+      <span>© <span id="year">2026</span> PRODIGITAL SpA · RUT 78.437.291-K · La Florida, Santiago · <a href="privacidad.html">Privacidad</a></span>
       <span class="tagline">Tecnología que impulsa personas</span>
     </div>
   </footer>
 
-  <a class="wa-float" href="https://wa.me/56964388698?text=Hola%20PRODIGITAL%2C%20quiero%20conversar%20sobre%20un%20proyecto" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+  <a class="wa-float" href="https://wa.me/56964388698?text=Hola%20PRODIGITAL%2C%20quiero%20conversar%20sobre%20un%20proyecto%20%5Bweb%5D" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg>
   </a>
 
@@ -485,7 +494,7 @@
       e.preventDefault();
       msg.className = 'form-msg';
       if (!form.checkValidity()) {
-        msg.textContent = 'Completa nombre, correo y mensaje, por favor.';
+        msg.textContent = 'Completa nombre, correo y mensaje, y acepta el aviso de privacidad.';
         msg.classList.add('err');
         return;
       }
