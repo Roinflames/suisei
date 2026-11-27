@@ -1,0 +1,9 @@
+# Cloudflare Pages response headers (https://developers.cloudflare.com/pages/configuration/headers/).
+# HSTS: 1 month, no includeSubDomains, no preload (decision recorded in workspace BACKLOG.md).
+# CSP is Report-Only for now; script hashes cover the inline <script> of index.html and
+# farmacias.html and must be recomputed whenever those scripts change.
+/*
+  Strict-Transport-Security: max-age=2592000
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), hid=(), midi=(), magnetometer=(), gyroscope=(), accelerometer=(), display-capture=(), interest-cohort=(), browsing-topics=()
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'sha256-41Yc5sRowQKrGMkzbsxrYXMMalb19bMXIunigzFX/4I=' 'sha256-yqZ75yR61TSF6Yz+JS55ZMGj8cmuo1kfVVOmP7TO1LU=' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self' https://formspree.io https://cloudflareinsights.com; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
